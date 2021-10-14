@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS pern_test;
+CREATE DATABASE pern_test;
