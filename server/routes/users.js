@@ -22,22 +22,20 @@ router.post('/add', (req, res) => {
   // Validate
   const {error, value} = newUserSchema.validate(req.body)
 
-  if (error) res.status(400).json(error)
+  if (error) return res.status(400).json(error)
 
-  else {
-    const salt = bcrypt.genSaltSync(12)
-    const hash = bcrypt.hashSync(password, salt)
+  const salt = bcrypt.genSaltSync(12)
+  const hash = bcrypt.hashSync(password, salt)
 
-    db.none('INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4);', [first_name, last_name, email, hash])
-    .then(() => res.json({
-      "success": true,
-      "message": "User successfully added to the database"
-    }))
-    .catch(error => res.status(500).json({
-      "success": false,
-      "message": error.message
-    }))
-  }
+  db.none('INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4);', [first_name, last_name, email, hash])
+  .then(() => res.json({
+    "success": true,
+    "message": "User successfully added to the database"
+  }))
+  .catch(error => res.status(500).json({
+    "success": false,
+    "message": error.message
+  }))
 })
 
 module.exports = router
